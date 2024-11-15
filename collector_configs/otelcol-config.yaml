@@ -1,0 +1,37 @@
+exporters:
+  otlp:
+    endpoint: api.honeycomb.io:443
+    headers:
+      x-honeycomb-team: "${HONEYCOMB_API_KEY}"
+  debug:
+    verbosity: detailed
+
+processors:
+  memory_limiter:
+    check_interval: 5s
+    limit_mib: 800
+    spike_limit_mib: 250
+  batch: {}
+  transform/labelme:
+    trace_statements:
+      - context: resource
+        statements:
+          - set(attributes["collector.name"], "${env:HOSTNAME}")
+
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        endpoint: otel-collector:4317
+      http:
+        endpoint: otel-collector:4318
+
+service:
+  telemetry:
+    logs:
+      level: debug
+  pipelines:
+    traces:
+      receivers: [otlp]
+      processors: [memory_limiter, transform/labelme, batch]
+      exporters: [otlp]
