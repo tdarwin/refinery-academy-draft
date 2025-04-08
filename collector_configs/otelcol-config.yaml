@@ -12,11 +12,6 @@ processors:
     limit_mib: 800
     spike_limit_mib: 250
   batch: {}
-  transform/labelme:
-    trace_statements:
-      - context: resource
-        statements:
-          - set(attributes["collector.name"], "${env:HOSTNAME}")
 
 receivers:
   otlp:
@@ -33,5 +28,5 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [memory_limiter, transform/labelme, batch]
-      exporters: [otlp]
+      processors: [memory_limiter, batch]
+      exporters: [otlp, debug]

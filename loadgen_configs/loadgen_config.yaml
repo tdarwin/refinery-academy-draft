@@ -20,3 +20,5 @@ fields:
   http.url: /u10,10
   # generate status codes where 5% are 400s and .1% are 500s
   http.response.status_code: /st5,0.1
+  # generate a hex ID as a user_id
+  app.user_id: /sx24
