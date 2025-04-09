@@ -12,7 +12,15 @@ processors:
     limit_mib: 800
     spike_limit_mib: 250
   batch: {}
-
+  transform/url:
+    error_mode: ignore
+    trace_statements:
+      - conditions:
+          - span.attributes["http.url"] != nil
+        statements:
+          - set(span.cache["extracts"], ExtractPatterns(span.attributes["http.url"], "^https://example.com/(?P<function>[a-z]+)/(?P<endpoint>[a-z]+)$"))
+          - set(span.attributes["app.function"], span.cache["extracts"]["function"])
+          - set(span.attributes["app.endpoint"], span.cache["extracts"]["endpoint"])
 receivers:
   otlp:
     protocols:
@@ -28,5 +36,5 @@ service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: [memory_limiter, batch]
+      processors: [memory_limiter, transform/url, batch]
       exporters: [otlp]
