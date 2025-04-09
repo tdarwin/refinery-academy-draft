@@ -14,12 +14,23 @@ services:
     networks:
       - honeycomb
 
-  loadgen:
+  loadgen1:
     image: ghcr.io/honeycombio/loadgen/loadgen
     env_file:
       - .env
     volumes:
-      - ./loadgen_configs/loadgen_config.yaml:/etc/loadgen/config.yaml
+      - ./loadgen_configs/loadgen_config1.yaml:/etc/loadgen/config.yaml
+    command:
+      ["--config=/etc/loadgen/config.yaml"]
+    networks:
+      - honeycomb
+
+  loadgen2:
+    image: ghcr.io/honeycombio/loadgen/loadgen
+    env_file:
+      - .env
+    volumes:
+      - ./loadgen_configs/loadgen_config2.yaml:/etc/loadgen/config.yaml
     command:
       ["--config=/etc/loadgen/config.yaml"]
     networks:
