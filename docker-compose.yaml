@@ -24,6 +24,8 @@ services:
       ["--config=/etc/loadgen/config.yaml"]
     networks:
       - honeycomb
+    depends_on:
+      - otel-collector
 
   loadgen2:
     image: ghcr.io/honeycombio/loadgen/loadgen
@@ -35,6 +37,8 @@ services:
       ["--config=/etc/loadgen/config.yaml"]
     networks:
       - honeycomb
+    depends_on:
+      - otel-collector
 
 networks:
   honeycomb:
