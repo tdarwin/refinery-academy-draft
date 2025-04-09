@@ -1,6 +1,6 @@
 services:
   otel-collector:
-    image: otel/opentelemetry-collector-contrib:0.100.0
+    image: otel/opentelemetry-collector-contrib:latest
     hostname: otel-collector
     restart: always
     env_file:
@@ -13,6 +13,8 @@ services:
       - "4318:4318" # OTLP HTTP receiver
     networks:
       - honeycomb
+    depends_on:
+      - refinery
 
   loadgen:
     image: ghcr.io/honeycombio/loadgen/loadgen
@@ -22,6 +24,26 @@ services:
       - ./loadgen_configs/loadgen_config.yaml:/etc/loadgen/config.yaml
     command:
       ["--config=/etc/loadgen/config.yaml"]
+    networks:
+      - honeycomb
+    depends_on:
+      - otel-collector
+
+  refinery:
+    image: honeycombio/refinery
+    ports:
+      - 8080:8080
+      - 9090:9090
+    entrypoint:
+      - "refinery"
+    command:
+      - "-c"
+      - "/etc/refinery/config.yaml"
+      - "-r"
+      - "/etc/refinery/rules.yaml"
+    volumes:
+      - ./refinery_configs/config.yaml:/etc/refinery/config.yaml
+      - ./refinery_configs/rules.yaml:/etc/refinery/rules.yaml
     networks:
       - honeycomb
 
