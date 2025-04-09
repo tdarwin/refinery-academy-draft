@@ -8,7 +8,7 @@ format:
   tracetime: 10s
 quantity:
   tps: 100
-  tracecount: 200
+  runtime: 120s
   ramptime: 1s
 output:
   sender: otel

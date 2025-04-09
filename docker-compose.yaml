@@ -3,6 +3,8 @@ services:
     image: otel/opentelemetry-collector-contrib:0.100.0
     hostname: otel-collector
     restart: always
+    env_file:
+      - .env
     command: ["--config=/etc/otel-collector-config.yaml"]
     volumes:
       - ./collector_configs/otelcol-config.yaml:/etc/otel-collector-config.yaml
@@ -14,6 +16,8 @@ services:
 
   loadgen:
     image: ghcr.io/honeycombio/loadgen/loadgen
+    env_file:
+      - .env
     volumes:
       - ./loadgen_configs/loadgen_config.yaml:/etc/loadgen/config.yaml
     command:
