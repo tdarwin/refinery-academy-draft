@@ -3,11 +3,16 @@ Samplers:
   __default__:
     RulesBasedSampler:
       Rules:
-        - Name: Keep all when app.function is "bulb"
+        - Name: Keep all when http.response.status_code >= 500
           SampleRate: 1
           Conditions:
             - Field: app.function
-              Operator: "="
-              Value: bulb
-        - Name: Sample the rest
-          SampleRate: 10
+              Operator: ">="
+              Value: 500
+              Datatype: int
+        - Name: Sample the rest dynamically
+          Sampler:
+            EMADynamicSampler:
+              GoalSampleRate: 15
+              FieldList:
+                - http.url
