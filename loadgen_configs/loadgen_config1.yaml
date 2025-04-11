@@ -17,7 +17,7 @@ global:
   loglevel: debug
 fields:
   # simulate URLs for 10 services, each of which has 10 endpoints on the root span
-  0.http.url: /u2,10
+  0.url.full: /u2,10
   # generate status codes where 5% are 400s and .1% are 500s on the root span
   0.http.response.status_code: /st5,0.1
   # generate a hex ID as a user_id on the root span
