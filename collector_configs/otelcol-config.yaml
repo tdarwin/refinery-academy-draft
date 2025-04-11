@@ -16,9 +16,9 @@ processors:
     error_mode: ignore
     trace_statements:
       - conditions:
-          - span.attributes["http.url"] != nil
+          - span.attributes["url.full"] != nil
         statements:
-          - set(span.cache["extracts"], ExtractPatterns(span.attributes["http.url"], "^https://example.com/(?P<function>[a-z]+)/(?P<endpoint>[a-z]+)$"))
+          - set(span.cache["extracts"], ExtractPatterns(span.attributes["url.full"], "^https://example.com/(?P<function>[a-z]+)/(?P<endpoint>[a-z]+)$"))
           - set(span.attributes["app.function"], span.cache["extracts"]["function"])
           - set(span.attributes["app.endpoint"], span.cache["extracts"]["endpoint"])
 receivers:
