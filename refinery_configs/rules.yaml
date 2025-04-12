@@ -15,4 +15,4 @@ Samplers:
             EMADynamicSampler:
               GoalSampleRate: 15
               FieldList:
-                - url.full
+                - app.function
